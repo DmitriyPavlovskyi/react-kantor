@@ -1,8 +1,8 @@
 import React from 'react';
 import {render} from 'react-dom';
+import Article from './article';
+import {articles} from './fixtures';
 
-function HelloWorld() {
-  return <h1>Hello World!</h1>
-}
+const article = articles[0];
 
-render(<HelloWorld />, document.getElementById('container'));
+render(<Article article = {article} />, document.getElementById('container'));
