@@ -7,13 +7,22 @@ export default class Article extends Component {
     super(props);
 
     this.state = {
-      isOpen: false
+      isOpen: false,
+      isCommentOpen: false
     };
   }
   // Привязываем контекст к конкретному инстансу с помощью arrow function
-  toggleOpen = () => {
+  toggleOpen = (ev) => {
+    // Тут нам доступна обертка события, которую создает реакт.
+    // Если вдруг нам нужно реальное событие ДОМа, тогда можно использовать ev.nativeEvent
     this.setState({
       isOpen: !this.state.isOpen
+    });
+  }
+
+  toggleCommentsOpen = (ev) => {
+    this.setState({
+      isCommentOpen: !this.state.isCommentOpen
     });
   }
 
@@ -21,14 +30,30 @@ export default class Article extends Component {
     if (!this.state.isOpen) {
       return null;
     }
+
     const {article} = this.props;
     return <section>{article.text}</section>;
+  }
+
+  getComments() {
+    if (!this.state.isCommentOpen) {
+      return null;
+    }
+
+    const {article} = this.props;
+    const {isCommentOpen} = this.state;
+    const articleComments = article.comments.map(comment =>
+      <div key = {comment.id}>
+        <p>{comment.text}</p>
+        <h5>{comment.user}</h5>
+      </div>)
+    return <section>{articleComments}</section>;
   }
 
   render() {
     console.log(this.props);
     const {article} = this.props;
-    const {isOpen} = this.state;
+    const {isOpen, isCommentOpen} = this.state;
     // Деструктуризация
 
     return (
@@ -38,6 +63,10 @@ export default class Article extends Component {
           {isOpen ? 'Close' : 'Open'}
         </button>
         {this.getBody()}
+        {isOpen ? <button onClick = {this.toggleCommentsOpen}>
+          {isCommentOpen ? 'Hide comments' : 'Open comments'}
+        </button> : null}
+        {this.getComments()}
       </div>
     );
   }
