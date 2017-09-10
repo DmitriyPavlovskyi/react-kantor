@@ -1,30 +1,35 @@
 import React, {Component} from 'react';
+// React нужен для того, чтоб когда код будет компилится и
+// превратится в React.createComponent у него был доступ к реакту
 
-export default class  Article extends Component {
+export default class Article extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       isOpen: false
-    }
+    };
   }
-// Привязываем контекст к конкретному инстансу с помощью arrow function
+  // Привязываем контекст к конкретному инстансу с помощью arrow function
   toggleOpen = () => {
     this.setState({
       isOpen: !this.state.isOpen
-    })
+    });
   }
 
   getBody() {
-    if (!this.state.isOpen) return null;
+    if (!this.state.isOpen) {
+      return null;
+    }
     const {article} = this.props;
-    return <section>{article.text}</section>
+    return <section>{article.text}</section>;
   }
 
   render() {
     console.log(this.props);
     const {article} = this.props;
     const {isOpen} = this.state;
+    // Деструктуризация
 
     return (
       <div>
@@ -34,7 +39,7 @@ export default class  Article extends Component {
         </button>
         {this.getBody()}
       </div>
-    )
+    );
   }
 }
 
