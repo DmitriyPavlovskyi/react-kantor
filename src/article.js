@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import CommentList from './CommentList';
 // React нужен для того, чтоб когда код будет компилится и
 // превратится в React.createComponent у него был доступ к реакту
 
@@ -7,22 +8,18 @@ export default class Article extends Component {
     super(props);
 
     this.state = {
-      isOpen: false,
-      isCommentOpen: false
+      isOpen: false
     };
   }
+
   // Привязываем контекст к конкретному инстансу с помощью arrow function
   toggleOpen = (ev) => {
     // Тут нам доступна обертка события, которую создает реакт.
     // Если вдруг нам нужно реальное событие ДОМа, тогда можно использовать ev.nativeEvent
+    ev.preventDefault();
+    console.log('---', ev.nativeEvent)
     this.setState({
       isOpen: !this.state.isOpen
-    });
-  }
-
-  toggleCommentsOpen = (ev) => {
-    this.setState({
-      isCommentOpen: !this.state.isCommentOpen
     });
   }
 
@@ -31,42 +28,27 @@ export default class Article extends Component {
       return null;
     }
 
-    const {article} = this.props;
-    return <section>{article.text}</section>;
-  }
-
-  getComments() {
-    if (!this.state.isCommentOpen) {
-      return null;
-    }
-
-    const {article} = this.props;
-    const {isCommentOpen} = this.state;
-    const articleComments = article.comments.map(comment =>
-      <div key = {comment.id}>
-        <p>{comment.text}</p>
-        <h5>{comment.user}</h5>
-      </div>)
-    return <section>{articleComments}</section>;
+    const {article} = this.props
+    return (
+      <section>
+        {article.text}
+        <CommentList comments = {article.comments}/>
+      </section>
+    );
   }
 
   render() {
-    console.log(this.props);
     const {article} = this.props;
-    const {isOpen, isCommentOpen} = this.state;
+    const {isOpen} = this.state;
     // Деструктуризация
 
     return (
       <div>
         <h3>{article.title}</h3>
         <button onClick = {this.toggleOpen}>
-          {isOpen ? 'Close' : 'Open'}
+          {isOpen ? 'close' : 'open'}
         </button>
         {this.getBody()}
-        {isOpen ? <button onClick = {this.toggleCommentsOpen}>
-          {isCommentOpen ? 'Hide comments' : 'Open comments'}
-        </button> : null}
-        {this.getComments()}
       </div>
     );
   }
