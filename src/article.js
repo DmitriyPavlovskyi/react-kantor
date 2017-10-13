@@ -1,9 +1,18 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import CommentList from './CommentList';
 // React нужен для того, чтоб когда код будет компилится и
 // превратится в React.createComponent у него был доступ к реакту
 
 export default class Article extends Component {
+  static propTypes = {
+    article: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      text: PropTypes.string
+    }).isRequired
+  }
+
   constructor(props) {
     super(props);
 
@@ -28,7 +37,7 @@ export default class Article extends Component {
       return null;
     }
 
-    const {article} = this.props
+    const { article } = this.props;
     return (
       <section>
         {article.text}
