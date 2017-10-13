@@ -3,41 +3,25 @@ import PropTypes from 'prop-types';
 import CommentList from './CommentList';
 // React нужен для того, чтоб когда код будет компилится и
 // превратится в React.createComponent у него был доступ к реакту
+import toggleOpen from '../decorators/toggleOpen';
 
-export default class Article extends Component {
+class Article extends Component {
   static propTypes = {
     article: PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       text: PropTypes.string
-    }).isRequired
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isOpen: false
-    };
-  }
-
-  // Привязываем контекст к конкретному инстансу с помощью arrow function
-  toggleOpen = (ev) => {
-    // Тут нам доступна обертка события, которую создает реакт.
-    // Если вдруг нам нужно реальное событие ДОМа, тогда можно использовать ev.nativeEvent
-    ev.preventDefault();
-    console.log('---', ev.nativeEvent)
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
+    }).isRequired,
+    isOpen: PropTypes.bool,
+    toggleOpen: PropTypes.func
   }
 
   getBody() {
-    if (!this.state.isOpen) {
+    const { article, isOpen } = this.props;
+    if (!isOpen) {
       return null;
     }
 
-    const { article } = this.props;
     return (
       <section>
         {article.text}
@@ -47,14 +31,13 @@ export default class Article extends Component {
   }
 
   render() {
-    const {article} = this.props;
-    const {isOpen} = this.state;
+    const {article, isOpen, toggleOpen } = this.props;
     // Деструктуризация
 
     return (
       <div>
         <h3>{article.title}</h3>
-        <button onClick = {this.toggleOpen}>
+        <button onClick = {toggleOpen}>
           {isOpen ? 'close' : 'open'}
         </button>
         {this.getBody()}
@@ -75,3 +58,5 @@ export default class Article extends Component {
 //     </div>
 //   )
 // }
+
+export default toggleOpen(Article);
