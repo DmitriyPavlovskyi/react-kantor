@@ -1,7 +1,7 @@
 import React from 'react';
 import Article from './Article';
 
-export default function ArticleList ({articles}) {
+export default function ArticleList({articles}) {
   // Каждый элемент массива должен содержать свой уникальный ключ
   const articleElements = articles.map(article => <li key = {article.id}><Article article = {article} /></li>);
 
@@ -9,5 +9,5 @@ export default function ArticleList ({articles}) {
     <ul>
       {articleElements}
     </ul>
-  )
+  );
 }
