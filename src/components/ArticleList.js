@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Article from './Article';
+import accordion from '../decorators/accordion';
 
-export default class ArticleList extends Component {
+class ArticleList extends Component {
+  static propTypes = {
+    articles: PropTypes.array.isRequired,
+    // from accordion
+    openItemId: PropTypes.string,
+    toggleOpenItem: PropTypes.func.isRequired
+  }
   state = {
     openArticleId: null
   }
   // Reverse data flow pattern. Управляем состоянием родителя из дочернего компонента <Article>
 
   render() {
+    const { articles, openItemId, toggleOpenItem } = this.props;
     // Каждый элемент массива должен содержать свой уникальный ключ
-    const articleElements = this.props.articles.map(article => <li key = {article.id}>
+    const articleElements = articles.map(article => <li key = {article.id}>
       <Article
         article = {article}
-        isOpen = {article.id === this.state.openArticleId}
-        toggleOpen = {this.toggleOpenArticle(article.id)}
+        isOpen = {article.id === openItemId}
+        toggleOpen = {toggleOpenItem(article.id)}
       />
     </li>);
 
@@ -23,9 +32,6 @@ export default class ArticleList extends Component {
       </ul>
     );
   }
-
-// Каррирование
-  toggleOpenArticle = openArticleId => ev => {
-    this.setState({ openArticleId });
-  }
 }
+
+export default accordion(ArticleList);

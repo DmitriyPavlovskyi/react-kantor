@@ -6,6 +6,7 @@ import toggleOpen from '../decorators/toggleOpen';
 class CommentList extends Component {
   static propTypes = {
     comments: PropTypes.array.isRequired,
+    // from toggleOpen decorator
     isOpen: PropTypes.bool.isRequired,
     toggleOpen: PropTypes.func.isRequired
   }

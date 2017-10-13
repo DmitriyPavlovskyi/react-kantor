@@ -10,9 +10,10 @@ class Article extends Component {
     isOpen: PropTypes.bool,
     toggleOpen: PropTypes.func,
     article: PropTypes.shape({
+      id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired
-    })
+    }).isRequired
   }
 
   getBody() {
