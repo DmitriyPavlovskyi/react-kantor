@@ -4,6 +4,7 @@ import ArticleList from './ArticleList';
 import ArticlesChart from './ArticlesChart';
 import UserForm from './UserForm';
 import Select from 'react-select';
+import Filters from './Filters';
 import 'react-select/dist/react-select.css';
 
 class App extends Component {
@@ -11,20 +12,12 @@ class App extends Component {
 
     };
 
-    state = {
-      selection: null
-    }
-
     render() {
-      const options = this.props.articles.map(article => ({
-        label: article.title,
-        value: article.id
-      }));
-
+      const {articles} = this.props;
       return (
         <div>
           <UserForm />
-          <Select options = {options} value = {this.state.selection} onChange = {this.changeSelection} multi />
+          <Filters articles = {articles}/>
           <ArticleList articles = {this.props.articles} />
           <ArticlesChart articles = {this.props.articles} />
         </div>
