@@ -4,6 +4,9 @@ import CommentList from './CommentList';
 // React нужен для того, чтоб когда код будет компилится и
 // превратится в React.createComponent у него был доступ к реакту
 import toggleOpen from '../decorators/toggleOpen';
+import { CSSTransitionGroup } from 'react-transition-group';
+// С помощью CSSTransitionGroup мы может добавлять анимацию на добавление/удаление элементов, но не на изменение!
+import './article.css';
 
 class Article extends Component {
   static propTypes = {
@@ -40,7 +43,14 @@ class Article extends Component {
         <button onClick = {toggleOpen}>
           {isOpen ? 'close' : 'open'}
         </button>
-        {this.getBody()}
+        <CSSTransitionGroup
+          transitionName="article"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}
+          component='div'
+        >
+          {this.getBody()}
+        </CSSTransitionGroup>
       </div>
     );
   }
