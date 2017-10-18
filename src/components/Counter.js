@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 // Используется для того, чтоб взять данные из store (!). Фабрика декоратора
 // Для использования данной штуки, необходимо ВСЁ(!) приложение обернуть в отдельный декоратор, без него работать не будет
 import { connect } from 'react-redux';
+import { increment } from '../AC';
 
 class Counter extends Component {
   static propTypes = {
     counter: PropTypes.number,
-    dispatch: PropTypes.object
+    dispatch: PropTypes.func
   };
 
   render() {
@@ -24,10 +25,8 @@ class Counter extends Component {
     // Так же в this.props будет метод dispatch
 
     console.log('---', 'incrementing');
-    // УСТАРЕВШИЙ СПОСОБ ОБРАЩЕНИЯ К store
-    this.props.dispatch({
-      type: 'INCREMENT'
-    });
+    // Более свежий способ обращения к store через actions creactor
+    this.props.dispatch(increment());
   }
 }
 
