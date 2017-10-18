@@ -8,7 +8,8 @@ import { increment } from '../AC';
 class Counter extends Component {
   static propTypes = {
     counter: PropTypes.number,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    dispatchIncrement: PropTypes.func
   };
 
   render() {
@@ -25,8 +26,11 @@ class Counter extends Component {
     // Так же в this.props будет метод dispatch
 
     console.log('---', 'incrementing');
-    // Более свежий способ обращения к store через actions creactor
-    this.props.dispatch(increment());
+    // Пробрасываем наше событие через connect и имеем к нему доступ из props
+    // ES5
+    // this.props.dispatchIncrement();
+    // ES6
+    this.props.increment();
   }
 }
 
@@ -37,8 +41,19 @@ function mapStateToProps(state) {
     counter: state.count
   };
 }
+
+// ES5
+// const mapToDispatch = {
+//   dispatchIncrement: increment
+// };
+
+// ES6
+const mapToDispatch = { increment };
+
 // Создаем декоратор из нашей фабрики и передаем в него нашу функцию
-const decorator = connect(mapStateToProps);
+// Вторым параметром коннект может принимать обьект, через ключ которого
+// мы будем иметь доступ к событию в action creator, которе будем диспатчить
+const decorator = connect(mapStateToProps, mapToDispatch);
 // Оборачиваем в декоратор наш компонент
 export default decorator(Counter);
 // Можно будет иметь доступ к этому кейсу через - store.displatch({type: 'INCREMENT'});
