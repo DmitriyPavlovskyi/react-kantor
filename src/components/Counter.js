@@ -9,7 +9,7 @@ class Counter extends Component {
   static propTypes = {
     counter: PropTypes.number,
     dispatch: PropTypes.func,
-    dispatchIncrement: PropTypes.func
+    increment: PropTypes.func
   };
 
   render() {
@@ -31,16 +31,24 @@ class Counter extends Component {
     // this.props.dispatchIncrement();
     // ES6
     this.props.increment();
+
+    // Если будет несколько actions, то делаем деструктуризацию и вызываем по отдельности
+    // Но очень важно не забывать вытягивать эту функцию из this.props,
+    // поскольку если этого не сделать,
+    // код не поломается но не будет ошибок и ничего не будет работать (!)
+    // const {increment} = this.props;
+    // increment();
   }
 }
 
 // На вход получает текущее состояние store, а возвращает то, что нам нужно вытянуть из него
 // Так же в this.props запишется метод dispatch который мы сможем использовать (УСТАРЕВШИЙ СПОСОБ)
-function mapStateToProps(state) {
-  return {
-    counter: state.count
-  };
-}
+// Эта функция связывает props компонента с state store (!)
+// function mapStateToProps(state) {
+//   return {
+//     counter: state.count
+//   };
+// }
 
 // ES5
 // const mapToDispatch = {
@@ -48,12 +56,20 @@ function mapStateToProps(state) {
 // };
 
 // ES6
-const mapToDispatch = { increment };
+// const mapToDispatch = { increment };
 
 // Создаем декоратор из нашей фабрики и передаем в него нашу функцию
 // Вторым параметром коннект может принимать обьект, через ключ которого
 // мы будем иметь доступ к событию в action creator, которе будем диспатчить
-const decorator = connect(mapStateToProps, mapToDispatch);
+
+// const decorator = connect(mapStateToProps, mapToDispatch);
+
 // Оборачиваем в декоратор наш компонент
-export default decorator(Counter);
+
+// export default decorator(Counter);
 // Можно будет иметь доступ к этому кейсу через - store.displatch({type: 'INCREMENT'});
+
+// А ниже описано тоже самое, только с использованием каррирования и best practices (!)
+
+//             connect(mapStateToProps,                  mapToDispatch)   (Counter)
+export default connect((state) => ({counter: state.count}), { increment })(Counter);
