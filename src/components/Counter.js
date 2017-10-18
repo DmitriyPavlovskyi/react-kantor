@@ -71,5 +71,7 @@ class Counter extends Component {
 
 // А ниже описано тоже самое, только с использованием каррирования и best practices (!)
 
+// Первый аргумент connect - возможность получить данные из Store
+// А второй - сообщить, что компонент как-то повлиял на систему (?)
 //             connect(mapStateToProps,                  mapToDispatch)   (Counter)
 export default connect((state) => ({counter: state.count}), { increment })(Counter);
