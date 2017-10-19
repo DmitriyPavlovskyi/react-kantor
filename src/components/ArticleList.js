@@ -12,11 +12,8 @@ class ArticleList extends Component {
     openItemId: PropTypes.string,
     toggleOpenItem: PropTypes.func.isRequired
   }
-  state = {
-    openArticleId: null
-  }
-  // Reverse data flow pattern. Управляем состоянием родителя из дочернего компонента <Article>
 
+  // Reverse data flow pattern. Управляем состоянием родителя из дочернего компонента <Article>
   render() {
     const { articles, openItemId, toggleOpenItem } = this.props;
     // Каждый элемент массива должен содержать свой уникальный ключ
@@ -36,4 +33,19 @@ class ArticleList extends Component {
   }
 }
 // Если используется несколько декораторов, иногда важна последовательность
-export default connect(state => ({articles: state.articles}))(accordion(ArticleList));
+// export default connect(state => ({articles: state.articles}))(accordion(ArticleList));
+
+// Лучшее место чтоб произвести фильтрацию - connect
+export default connect(({filters, articles}) => {
+  const {selected, dateRange: {from, to}} = filters;
+
+  const filteredArticles = articles.filter(article => {
+    const published = Date.parse(article.date);
+    return (!selected.length || selected.includes(article.id)) &&
+        (!from || !to || (published > from && published < to));
+  });
+
+  return {
+    articles: filteredArticles
+  };
+})(accordion(ArticleList));

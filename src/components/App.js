@@ -12,7 +12,6 @@ class App extends Component {
     };
 
     render() {
-      const {articles} = this.props;
       //-------------------- ДОБАВИТЬ ДАННЫЕ В Filters ЧЕРЕЗ СТОР---------------------
       return (
         <div>

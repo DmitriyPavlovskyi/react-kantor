@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {deleteArticle} from '../../AC';
 import CommentList from '../CommentList';
-// React нужен для того, чтоб когда код будет компилится и
-// превратится в React.createComponent у него был доступ к реакту
-import toggleOpen from '../../decorators/toggleOpen';
 import {CSSTransitionGroup} from 'react-transition-group';
 // С помощью CSSTransitionGroup мы может добавлять анимацию на добавление/удаление элементов, но не на изменение!
 import './style.css';
@@ -21,40 +18,22 @@ class Article extends Component {
     }).isRequired
   }
 
+  state = {
+    updateIndex: 0
+  }
+
   getBody() {
-    const { article, isOpen } = this.props;
+    const {article, isOpen} = this.props;
+
     if (!isOpen) {
       return null;
     }
-
     return (
       <section>
         {article.text}
-        <CommentList comments = {article.comments}/>
+        <button onClick = {() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
+       <CommentList comments = {article.comments} ref = {this.setCommentsRef} key = {this.state.updateIndex}/>
       </section>
-    );
-  }
-
-  render() {
-    const {article, isOpen, toggleOpen } = this.props;
-    // Деструктуризация
-
-    return (
-      <div>
-        <h3>{article.title}</h3>
-        <button onClick = {toggleOpen}>
-          {isOpen ? 'close' : 'open'}
-        </button>
-        <button onClick={this.handleDelete}>Delete article</button>
-        <CSSTransitionGroup
-          transitionName="article"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-          component='div'
-        >
-          {this.getBody()}
-        </CSSTransitionGroup>
-      </div>
     );
   }
 
@@ -63,6 +42,30 @@ class Article extends Component {
 
     deleteArticle(article.id);
     console.log('---', 'deleting article');
+  }
+
+  render() {
+    const {article, isOpen, toggleOpen} = this.props;
+
+    return (
+      <div ref = {this.setContainerRef}>
+        <h3>{article.title}</h3>
+        <button onClick = {toggleOpen}>
+          {isOpen ? 'close' : 'open'}
+        </button>
+        <button onClick = {this.handleDelete}>delete me</button>
+        <CSSTransitionGroup
+          transitionName = 'article'
+          transitionAppear
+          transitionEnterTimeout = {300}
+          transitionLeaveTimeout = {500}
+          transitionAppearTimeout = {500}
+          component = 'div'
+        >
+          {this.getBody()}
+        </CSSTransitionGroup>
+      </div>
+    );
   }
 }
 
