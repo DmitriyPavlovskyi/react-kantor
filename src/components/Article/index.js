@@ -18,6 +18,7 @@ class Article extends Component {
     }).isRequired
   }
 
+// updateIndex нужен для уникальных ключей комментариев
   state = {
     updateIndex: 0
   }
