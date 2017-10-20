@@ -31,5 +31,7 @@ export function filteredArticles({filters, articles}) {
 
 export const commentSelectorFactory = () => createSelector(commentsGetter, idGetter, (comments, id) => {
   console.log('getting comment');
-  return comments.find(comment => comment.id === id);
+  // Теперь весь поиск происходит в comments.js, после сортировки
+  // мы просто обращаемся к конкретному ключу обьекта, что ускоряет поиск
+  return comments[id];
 });
