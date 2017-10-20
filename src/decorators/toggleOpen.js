@@ -17,7 +17,7 @@ export default (OriginalComponent) => class WrappedComponent extends ReactCompon
     // Если вдруг нам нужно реальное событие ДОМа, тогда можно использовать ev.nativeEvent
     // Проверка на существование ивента, на случай, если он перестанет приходить
     ev && ev.preventDefault && ev.preventDefault();
-    console.log('---', ev.nativeEvent)
+    // console.log('---', ev.nativeEvent)
     this.setState({
       isOpen: !this.state.isOpen
     });

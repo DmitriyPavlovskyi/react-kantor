@@ -2,10 +2,13 @@ import {createSelector} from 'reselect';
 // Пример мемоизации (запоминание предыдущих данных)
 const filtersGetter = state => state.filters;
 const articlesGetter = state => state.articles;
+const commentsGetter = state => state.comments;
+const idGetter = (state, props) => props.id;
 
 // Оптимизация. Если что-то измениться, будет сравнивать articles и filters с
 // прошлого раза и если ничего не поменялось, то не будет вызывать
 // эту функцию повторно. Только, если что-то поменялось
+// https://github.com/reactjs/reselect
 export const filteredArticlesSelector = createSelector(articlesGetter, filtersGetter, (articles, filters) => {
   const {selected, dateRange: {from, to}} = filters;
 
@@ -25,3 +28,8 @@ export function filteredArticles({filters, articles}) {
         (!from || !to || (published > from && published < to));
   });
 }
+
+export const commentSelectorFactory = () => createSelector(commentsGetter, idGetter, (comments, id) => {
+  console.log('getting comment');
+  return comments.find(comment => comment.id === id);
+});
