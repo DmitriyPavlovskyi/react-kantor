@@ -1,7 +1,7 @@
-import {normalizedComments as defaulComments} from '../fixtures';
+import {normalizedComments as defaultComments} from '../fixtures';
 import {} from '../constants';
 
-export default (commentsState = defaulComments, action) => {
+export default (commentsState = defaultComments, action) => {
   const {type, payload} = action
 
   switch (type) {

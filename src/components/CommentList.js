@@ -33,7 +33,7 @@ function getBody({comments, isOpen}) {
   return (
     <div>
       <ul>
-        {comments.map(id => <li key={id}><Comment id={id}/></li>)}
+        {comments.map(id => <li key={id}><Comment id = {id}/></li>)}
       </ul>
       <CommentForm/>
     </div>
