@@ -15,6 +15,7 @@ const ArticleRecord = Record({
   comments: []
 });
 
+// Map не соблюдает порядок как обычные обьекты, если важен порядок можно использовать OrderedMap
 const defaultState = new Map({});
 
 export default (articleState = defaultState, action) => {
