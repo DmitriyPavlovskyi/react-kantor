@@ -5,7 +5,7 @@ import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES} from '../constants';
 // Record нужен для того чтоб после маппинга immutable можно было в приложении так
 // же обращаться к полям как и раньше .title, .id ... Поскольку сейчас
 // нужно обращаться через .get('id'), .get('title') ...
-import {Map, Record} from 'immutable';
+import {OrderedMap, Record} from 'immutable';
 
 // Нужно записать структуру обьекта для Record, для того чтоб можно было обращаться к полям. Пишем дефолтные данные при инициализации
 const ArticleRecord = Record({
@@ -16,7 +16,13 @@ const ArticleRecord = Record({
 });
 
 // Map не соблюдает порядок как обычные обьекты, если важен порядок можно использовать OrderedMap
-const defaultState = new Map({});
+const ReducerState = Record({
+  loading: false,
+  loaded: false,
+  entities: new OrderedMap({})
+});
+
+const defaultState = new ReducerState();
 
 export default (articleState = defaultState, action) => {
   const {type, payload, response, randomId} = action;
@@ -29,7 +35,7 @@ export default (articleState = defaultState, action) => {
     // С помощью immutable можно использовать его родной delete метод
     // const tmpState = {...articleState};
     // delete tmpState[payload.id];
-    return articleState.delete(payload.id);
+    return articleState.deleteIn(['entities', payload.id]);
 
     // Внутри создаем новую копию статьи, в которой создаем новую копию комментов.
     // Не стоит мутировать данные! Если менять данные по ссылке connect сделает
@@ -39,7 +45,8 @@ export default (articleState = defaultState, action) => {
   // updateIn, setIn, getIn работают с более глубокими вложенностями
   // первый параметром решаем где поменять, потом что и вторым аргументом передаем как менять
   // Опять же использовать методы, которые не мутируют массив (!)
-    return articleState.updateIn([payload.articleId, 'comments'], comments => comments.concat(randomId));
+    return articleState.updateIn(['entities', payload.articleId, 'comments'],
+      comments => comments.concat(randomId));
     // const article = articleState[payload.articleId];
     // return {
     //   ...articleState,
@@ -50,7 +57,7 @@ export default (articleState = defaultState, action) => {
     // };
 
   case LOAD_ALL_ARTICLES:
-    return arrToMap(response, ArticleRecord);
+    return articleState.set('entities', arrToMap(response, ArticleRecord));
 
   default: return articleState;
   }
