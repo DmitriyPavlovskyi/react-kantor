@@ -11,6 +11,7 @@ module.exports = {
     publicPath: '/static/'
   },
   devServer: {
+    // Настройки сервера. Все запросы, которые будут приходить на /api будем редиректить на локалхост
     proxy: [{
       path: '/api/',
       target: 'http://localhost:3001'

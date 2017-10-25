@@ -4,6 +4,7 @@ import Article from './Article';
 import accordion from '../decorators/accordion';
 import {connect} from 'react-redux';
 import {filteredArticlesSelector} from '../selectors';
+import {loadAllArticles} from '../AC';
 
 class ArticleList extends Component {
   static propTypes = {
@@ -11,7 +12,12 @@ class ArticleList extends Component {
     articles: PropTypes.array.isRequired,
     // from accordion
     openItemId: PropTypes.string,
-    toggleOpenItem: PropTypes.func.isRequired
+    toggleOpenItem: PropTypes.func.isRequired,
+    loadAllArticles: PropTypes.func.isRequired
+  }
+
+  componentDidMount() {
+    this.props.loadAllArticles();
   }
 
   // Reverse data flow pattern. Управляем состоянием родителя из дочернего компонента <Article>
@@ -36,9 +42,10 @@ class ArticleList extends Component {
 // Если используется несколько декораторов, иногда важна последовательность
 // export default connect(state => ({articles: state.articles}))(accordion(ArticleList));
 
+// loadAllArticles тут через мидлвару отправляем запрос на /api/article
 // Лучшее место чтоб произвести фильтрацию - connect
 export default connect((state) => {
   return {
     articles: filteredArticlesSelector(state)
   };
-})(accordion(ArticleList));
+}, {loadAllArticles})(accordion(ArticleList));

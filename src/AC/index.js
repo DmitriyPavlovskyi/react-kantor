@@ -1,4 +1,4 @@
-import {DELETE_ARTICLE, INCREMENT, CHANGE_DATE_RANGE, CHANGE_SELECTION, ADD_COMMENT} from '../constants';
+import {DELETE_ARTICLE, INCREMENT, CHANGE_DATE_RANGE, CHANGE_SELECTION, ADD_COMMENT, LOAD_ALL_ARTICLES} from '../constants';
 
 export function increment() {
   // Это чистая функция, которая попросту создаст обьект action creator
@@ -33,5 +33,12 @@ export function addComment(comment, articleId) {
     type: ADD_COMMENT,
     payload: { comment, articleId},
     generateId: true
+  };
+}
+
+export function loadAllArticles() {
+  return {
+    type: LOAD_ALL_ARTICLES,
+    callAPI: '/api/article'
   };
 }
