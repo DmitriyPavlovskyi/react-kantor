@@ -1,4 +1,4 @@
-import { CHANGE_DATE_RANGE, CHANGE_SELECTION, DELETE_ARTICLE } from '../constants'
+import { CHANGE_DATE_RANGE, CHANGE_SELECTION, DELETE_ARTICLE } from '../constants';
 
 const defaultFilters = {
   selected: [],
