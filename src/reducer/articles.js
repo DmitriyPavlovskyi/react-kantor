@@ -1,6 +1,6 @@
 // import {normalizedArticles as defaultArticles} from '../fixtures';
 import {arrToMap} from '../helpers';
-import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES} from '../constants';
+import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, START, SUCCESS} from '../constants';
 // immutable нужен для работы с иммутабельными данными. Доступны методы get, set и т.д.
 // Record нужен для того чтоб после маппинга immutable можно было в приложении так
 // же обращаться к полям как и раньше .title, .id ... Поскольку сейчас
@@ -55,9 +55,14 @@ export default (articleState = defaultState, action) => {
     //     coments: (article.comments || []).concat(randomId)
     //   }
     // };
+  case LOAD_ALL_ARTICLES + START:
+    return articleState.set('loading', true);
 
-  case LOAD_ALL_ARTICLES:
-    return articleState.set('entities', arrToMap(response, ArticleRecord));
+  case LOAD_ALL_ARTICLES + SUCCESS:
+    return articleState
+      .set('entities', arrToMap(response, ArticleRecord))
+      .set('loading', false)
+      .set('loaded', true)
 
   default: return articleState;
   }
