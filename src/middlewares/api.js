@@ -7,6 +7,7 @@ export default store => next => action => {
     return next(action);
   }
 
+  // Мидлвар дойдет до остальных, только когда выполнится фетч
   fetch(callAPI)
     .then(res => res.json())
     .then(response => next({...action, response}));

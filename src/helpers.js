@@ -1,11 +1,11 @@
-export function arrToMap(arr) {
-  return arr.reduce((acc, item) => {
-    acc[item.id] = item;
+import {Map} from 'immutable';
 
-    return acc;
-  }, {});
+export function arrToMap(arr) {
+  // Теперь будем возвращать имутабельный Map, а не просто обьект
+  // store.getState().articles ---> MAP object wrapper
+  return arr.reduce((acc, item) => acc.set(item.id, new Map(item)), new Map({}));
 }
 
 export function mapToArr(obj) {
-  return Object.keys(obj).map(id => obj[id]);
+  return obj.valueSeq().toArray();
 }
