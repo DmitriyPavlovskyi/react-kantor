@@ -13,8 +13,7 @@ class ArticleList extends Component {
     articles: PropTypes.array.isRequired,
     // from accordion
     openItemId: PropTypes.string,
-    toggleOpenItem: PropTypes.func.isRequired,
-    loadAllArticles: PropTypes.func.isRequired
+    toggleOpenItem: PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -27,6 +26,7 @@ class ArticleList extends Component {
 
   // Reverse data flow pattern. Управляем состоянием родителя из дочернего компонента <Article>
   render() {
+    console.log('---', 'update article list');
     const { articles, openItemId, toggleOpenItem, loading } = this.props;
     if (loading) {
       return <Loader />;

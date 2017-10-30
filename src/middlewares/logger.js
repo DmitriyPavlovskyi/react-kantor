@@ -1,6 +1,7 @@
 export default store => next => action => {
   // Состояние до и после того как задиспатчится экшн
   console.log('middleware logger state before', store.getState());
+  console.log('dispatching', action);
   next(action);
   console.log('middleware logger state after', store.getState());
 };

@@ -1,6 +1,6 @@
 // import {normalizedArticles as defaultArticles} from '../fixtures';
 import {arrToMap} from '../helpers';
-import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, START, SUCCESS} from '../constants';
+import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE, START, SUCCESS} from '../constants';
 // immutable нужен для работы с иммутабельными данными. Доступны методы get, set и т.д.
 // Record нужен для того чтоб после маппинга immutable можно было в приложении так
 // же обращаться к полям как и раньше .title, .id ... Поскольку сейчас
@@ -12,6 +12,7 @@ const ArticleRecord = Record({
   text: undefined,
   title: '',
   id: undefined,
+  loading: false,
   comments: []
 });
 
@@ -64,6 +65,14 @@ export default (articleState = defaultState, action) => {
       .set('loading', false)
       .set('loaded', true)
 
+
+// Если какого-то промежуточного результата не будет, то оно не упадет с ошибкой, а setIn создаст его!
+  case LOAD_ARTICLE + START:
+    return articleState.setIn(['entities', payload.id, 'loading'], true);
+
+  // В случае этого кейса просто перезапишем статью на новую
+  case LOAD_ARTICLE + SUCCESS:
+    return articleState.setIn(['entities', payload.id], new ArticleRecord(payload.response));
   default: return articleState;
   }
 };

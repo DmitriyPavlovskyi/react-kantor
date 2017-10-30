@@ -1,26 +1,33 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {deleteArticle} from '../../AC';
+import {deleteArticle, loadArticle} from '../../AC';
 import CommentList from '../CommentList';
-import {CSSTransitionGroup} from 'react-transition-group';
 // С помощью CSSTransitionGroup мы может добавлять анимацию на добавление/удаление элементов, но не на изменение!
+import {CSSTransitionGroup} from 'react-transition-group';
 import './style.css';
+import Loader from '../Loader';
 
-class Article extends Component {
+class Article extends PureComponent {
   static propTypes = {
     isOpen: PropTypes.bool,
     toggleOpen: PropTypes.func,
     article: PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired
+      text: PropTypes.string
     }).isRequired
   }
 
-// updateIndex нужен для уникальных ключей комментариев
+//updateIndex нужен для уникальных ключей комментариев
   state = {
     updateIndex: 0
+  }
+
+  componentWillReceiveProps({isOpen, loadArticle, article}) {
+    if (isOpen && !article.text && !article.loading) {
+      loadArticle(article.id);
+    }
   }
 
   getBody() {
@@ -28,6 +35,10 @@ class Article extends Component {
 
     if (!isOpen) {
       return null;
+    }
+
+    if (article.loading) {
+      return <Loader />;
     }
     return (
       <section>
@@ -84,4 +95,4 @@ class Article extends Component {
 // }
 
 // Если нам ничего не надо вытягивать из store, то первый аргумент ставим null
-export default connect(null, { deleteArticle })(Article);
+export default connect(null, { deleteArticle, loadArticle })(Article);

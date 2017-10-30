@@ -8,11 +8,9 @@ import 'react-select/dist/react-select.css';
 
 class App extends Component {
     static propTypes = {
-      articles: PropTypes.array
     };
 
     render() {
-      //-------------------- ДОБАВИТЬ ДАННЫЕ В Filters ЧЕРЕЗ СТОР---------------------
       return (
         <div>
           <Counter />
@@ -23,7 +21,7 @@ class App extends Component {
       );
     }
 
-    changeSelection = selection => this.setState({ selection })
+    // changeSelection = selection => this.setState({ selection })
 }
 
 export default App;
