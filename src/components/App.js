@@ -4,6 +4,7 @@ import Articles from './routes/Articles';
 import UserForm from './UserForm';
 import Filters from './Filters';
 import NotFound from './routes/NotFound';
+import CommentsPage from './routes/CommentsPage';
 import Counter from './Counter';
 import {BrowserRouter as Router, Switch, Route, NavLink} from 'react-router-dom';
 // switch нужен для того чтоб избежать поведения, когда рендерится несколько роутов одновременно
@@ -29,6 +30,7 @@ class App extends Component {
               <Route path = '/counter' component = {Counter} />
               <Route path = '/filters' component = {Filters} />
               <Route path = '/articles' component = {Articles} />
+              <Route path = '/comments/:page' component = {CommentsPage} />
               <Route path = '*' component = {NotFound} />
             </Switch>
           </div>
