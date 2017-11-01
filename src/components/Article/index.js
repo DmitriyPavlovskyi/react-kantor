@@ -10,23 +10,28 @@ import Loader from '../Loader';
 
 class Article extends PureComponent {
   static propTypes = {
+    id: PropTypes.string.isRequired,
     isOpen: PropTypes.bool,
     toggleOpen: PropTypes.func,
+    // from connect
     article: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      title: PropTypes.string,
       text: PropTypes.string
-    }).isRequired
+    })
   }
 
 //updateIndex нужен для уникальных ключей комментариев
   state = {
-    updateIndex: 0
+    updateIndex: 0,
+    areCommentsOpen: false
   }
 
-  componentWillReceiveProps({isOpen, loadArticle, article}) {
-    if (isOpen && !article.text && !article.loading) {
-      loadArticle(article.id);
+  componentDidMount() {
+    const {loadArticle, article, id} = this.props;
+
+    if (!article || (!article.text && !article.loading)) {
+      loadArticle(id);
     }
   }
 
@@ -49,6 +54,11 @@ class Article extends PureComponent {
     );
   }
 
+  setCommentsRef = ref => {
+    this.comments = ref;
+    //console.log('---', ref)
+  }
+
   handleDelete = () => {
     const {deleteArticle, article} = this.props;
 
@@ -58,6 +68,10 @@ class Article extends PureComponent {
 
   render() {
     const {article, isOpen, toggleOpen} = this.props;
+
+    if (!article) {
+      return null;
+    }
 
     return (
       <div ref = {this.setContainerRef}>
@@ -95,4 +109,6 @@ class Article extends PureComponent {
 // }
 
 // Если нам ничего не надо вытягивать из store, то первый аргумент ставим null
-export default connect(null, { deleteArticle, loadArticle })(Article);
+export default connect((state, ownProps) => ({
+  article: state.articles.entities.get(ownProps.id)
+}), { deleteArticle, loadArticle })(Article);
